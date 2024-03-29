@@ -33,4 +33,76 @@ Key features of our solution include:
 
 By leveraging sensor technology, cloud-based analysis, and mobile accessibility, our solution aims to provide users with comprehensive insights into their spinal health. We prioritize user-friendliness, cost-effectiveness, and safety, addressing the limitations of existing evaluation methods. Our project envisions a future where monitoring spinal alignment is accessible, easy, and integral to overall well-being.
 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Arduion ide code - 
+
+#include <WiFi.h>
+#include <HTTPClient.h>
+
+#include <WiFi.h>
+#include <HTTPClient.h>
+
+const char* ssid = "FLEX-PK";
+const char* password = "123456789";
+const char* serverName = "http://api.thingspeak.com/update";
+String apiKey = "PZ9SW6QMRMUL3G4U";
+const int flexPin = 34;
+
+int initPos;
+int rawFlexValue;
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(flexPin, INPUT);
+  initPos = calibrateSensor();
+  WiFi.begin(ssid, password);
+  Serial.println("Connecting");
+  while(WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("");
+  Serial.print("Connected to WiFi network with IP Address: ");
+  Serial.println(WiFi.localIP());
+}
+
+void loop() {
+  if(WiFi.status() == WL_CONNECTED) {
+    WiFiClient client;
+    HTTPClient http;
+    delay(10000);
+    rawFlexValue = analogRead(flexPin);
+    int deviation = map(rawFlexValue, initPos, 4095, -255, 255);
+    Serial.print("Raw Value: ");
+    Serial.print(rawFlexValue);
+    Serial.print("\tDeviation: ");
+    Serial.println(deviation);
+    http.begin(client, serverName);
+    http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+    String httpRequestData = "api_key=" + apiKey + "&field1=" + String(rawFlexValue) + "&field2=" + String(deviation);
+    int httpResponseCode = http.POST(httpRequestData);
+    Serial.print("HTTP Response code: ");
+    Serial.println(httpResponseCode);
+    http.end();
+  } else {
+    Serial.println("WiFi Disconnected");
+  }
+}
+
+int calibrateSensor() {
+  int calibrationValue = 0;
+  int numReadings = 10;
+  for (int i = 0; i < numReadings; i++) {
+    calibrationValue += analogRead(flexPin);
+    delay(50);
+  }
+  calibrationValue /= numReadings;
+  Serial.print("Calibration Value: ");
+  Serial.println(calibrationValue);
+  return calibrationValue;
+}
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 Join us in our endeavor to promote spinal health and well-being for all. Let's pave the way towards a healthier future with FutureTech.
