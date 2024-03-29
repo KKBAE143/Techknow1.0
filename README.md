@@ -11,6 +11,9 @@ Date: March 28th and 29th, 2024
 
 Venue: Draper Startup House, Hyderabad
 
+
+https://github.com/KKBAE143/Techknow1.0/assets/117244354/71266602-0b79-49e6-a8da-6820d99d46ed
+
 Description:
 
 Our project, titled "Health Monitoring of Spine and Foot Pressure Monitoring System," addresses the critical issue of spinal misalignment and its impact on overall well-being. Spinal misalignment, often leading to disc degeneration and structural support issues, is a prevalent yet under-addressed health concern. Existing evaluation methods are complex, costly, and often involve radiation exposure, limiting their accessibility and usability.
